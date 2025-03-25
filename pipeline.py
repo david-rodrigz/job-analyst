@@ -1,3 +1,4 @@
+import time
 import json
 import os
 from google import genai
@@ -42,10 +43,16 @@ def append_to_json_file(file_path, new_data):
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=4)
 
-# Example job post
-file_path = 'Job Posts/Data Engineer/Analytics_Data_Engineer.md'
-job_posting = get_job_posting(file_path)
+def mine_keywords(job_folder_path):
+    for job_title in os.listdir(job_folder_path):
+        job_posting_path = os.path.join(job_folder_path, job_title)
+        job_posting = get_job_posting(job_posting_path)
+        # Extract keywords
+        keywords = extract_key_words(job_posting)
+        # save data
+        data = {job_title: keywords}
+        append_to_json_file('keywords.json', data)
 
-# Example keyword extraction
-keywords = extract_key_words(job_posting)
-print(keywords)
+# Example keyword mining
+job_folder_path = 'Job Posts/Data Engineer'
+mine_keywords(job_folder_path)
