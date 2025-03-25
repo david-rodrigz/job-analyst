@@ -1,3 +1,4 @@
+import json
 import os
 from google import genai
 
@@ -23,6 +24,23 @@ def get_job_posting(file_path):
     # Skip the first line (heading) and join the rest of the lines to get the job posting content
     job_posting = ''.join(lines[1:]).strip()
     return job_posting
+
+def append_to_json_file(file_path, new_data):
+    # Check if the file exists
+    if os.path.exists(file_path):
+        # Read the existing data
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+    else:
+        # If the file does not exist, start with an empty list
+        data = []
+
+    # Append the new data
+    data.append(new_data)
+
+    # Write the updated data back to the file
+    with open(file_path, 'w') as file:
+        json.dump(data, file, indent=4)
 
 # Example job post
 file_path = 'Job Posts/Data Engineer/Analytics_Data_Engineer.md'
